@@ -218,15 +218,12 @@ flatpak run -d --command=bash org.nazev.aplikace
 ~~~ 
 
 
-4) 
 
 [0]: https://src.fedoraproject.org/flatpaks/supertux
 [1]: https://src.fedoraproject.org/
 [2]: https://koji.fedoraproject.org/koji/
 [3]: https://bodhi.fedoraproject.org/updates/new
 [4]: https://docs.fedoraproject.org/en-US/packaging-guidelines/#_manpages
-
-https://docs.fedoraproject.org/en-US/flatpak/tutorial/
 
 
 
