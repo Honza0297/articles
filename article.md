@@ -1,24 +1,24 @@
-# Jak z RPM vytvořit flatpak
+# Jak z RPM vytvořit Flatpak
 
 
-## O flatpaku obecně
+## O Flatpaku obecně
 
-Poslední dobou se stále více mluví o nové edici Fedory - Silverblue. Ta, kromě jiného, nepoužívá klasický balíčkovací systém jako většina linuxových distribucí (třeba RPM v klasické Fedoře), ale spoléhá na distribuci aplikací přes flatpak. 
+Poslední dobou se stále více mluví o nové edici Fedory - Silverblue. Ta, kromě jiného, nepoužívá klasický balíčkovací systém jako většina linuxových distribucí (třeba RPM v klasické Fedoře), ale spoléhá na distribuci aplikací přes Flatpak. 
 
-Flatpak, stejně jako RPM, je způsob nasazování aplikací. Od klasických balíčkovacích systémů se ovšem liší hned v několika ohledech. Aplikace ve flatpaku jsou sandboxované -  běží ve svém vlastním kontejeneru - a pro přístup ke zdrojům, jako je třeba přístup k souborům nebo k síti, potřebují povolení. Flatpakované aplikace si s sebou také nesou všechny závislosti - odpadá tím problém s kompatibilitou různých verzí knihoven - všechno už za vás vyřešili ti, co aplikaci do flatpaku zabalili. Díky těmto vlastnostem jsou aplikace ve flatpaku velmi snadno přenositelné mezi systémy - stačí, aby daný systém flatpak podporoval. 
+Flatpak, stejně jako RPM, je způsob nasazování aplikací. Od klasických balíčkovacích systémů se ovšem liší hned v několika ohledech. Aplikace ve Flatpaku jsou sandboxované -  běží ve svém vlastním kontejeneru - a pro přístup ke zdrojům, jako je třeba přístup k souborům nebo k síti, potřebují povolení. Flatpakované aplikace si s sebou také nesou všechny závislosti - odpadá tím problém s kompatibilitou různých verzí knihoven - všechno už za vás vyřešili ti, co aplikaci do Flatpaku zabalili. Díky těmto vlastnostem jsou aplikace ve Flatpaku velmi snadno přenositelné mezi systémy - stačí, aby daný systém Flatpak podporoval. 
 
-Bohužel, jelikož je flatpak relativně nová technologie (prvotní myšlenka vznikla v roce 2013 a Silverblue, která spoléhá (téměř) výhradně na flatpak, je tu s námi zhruba dva roky), nejsou tak distribuované zdaleka všechny aplikace. Většinu flatpakovaných aplikací najdete na flathub.org, který se stal *de facto standardem* pro hostování aplikací ve flatpaku. Poslední dobou má ale konkurenci v podobě repozitáře flatpakových aplikací spravovaných Fedorou. Tam najdete flatpaky vytvořené z RPM balíčků, o kterých budei zbytek článku.
+Bohužel, jelikož je Flatpak relativně nová technologie (prvotní myšlenka vznikla v roce 2013 a Silverblue, která spoléhá (téměř) výhradně na Flatpak, je tu s námi zhruba dva roky), nejsou tak distribuované zdaleka všechny aplikace. Většinu Flatpakovaných aplikací najdete na flathub.org, který se stal *de facto standardem* pro hostování aplikací ve Flatpaku. Poslední dobou má ale konkurenci v podobě repozitáře Flatpakových aplikací spravovaných Fedorou. Tam najdete Flatpaky vytvořené z RPM balíčků, o kterých budei zbytek článku.
 
 
-## Jak se liší normální flatpaky od těch pro Silverblue?
+## Jak se liší normální Flatpaky od těch pro Silverblue?
 
-Hlavním rozdílem je zdroj dat. "Normální" flatpaky jsou sestavovány přímo ze zdrojových kódů, kdežto flatpaky od Fedory využívají jako zdroj dat RPM balíčky, což má za následek několik výhod. Díky RPM je třeba předem známý závislostní strom a aplikaci stačí "jen" zabalit. Díky RPM je také jasné, co a kam se instaluje - ve flatpaku se sice data aplikace nacházejí ve složce /app, ale stejně je dobré mít možnost dohledat, ke které části aplikace ten či onen soubor patří.
-Jako vše, i tohle řešení má svoje nevýhody. Jelikož se k sestavování flatpaků používají normální balíčky bez možnosti patche, v jejich spec souborech se občas nachází speciální úpravy kvůli flatpakům, které do nich přidají několik dalších řádků.
+Hlavním rozdílem je zdroj dat. "Normální" Flatpaky jsou sestavovány přímo ze zdrojových kódů, kdežto Flatpaky od Fedory využívají jako zdroj dat RPM balíčky, což má za následek několik výhod. Díky RPM je třeba předem známý závislostní strom a aplikaci stačí "jen" zabalit. Díky RPM je také jasné, co a kam se instaluje - ve Flatpaku se sice data aplikace nacházejí ve složce /app, ale stejně je dobré mít možnost dohledat, ke které části aplikace ten či onen soubor patří.
+Jako vše, i tohle řešení má svoje nevýhody. Jelikož se k sestavování Flatpaků používají normální balíčky bez možnosti patche, v jejich spec souborech se občas nachází speciální úpravy kvůli Flatpakům, které do nich přidají několik dalších řádků.
 
 
 ## Jak samotné převádění funguje? 
 
-Obecný postup je nejdříve vytvořit modul a z něj následně kontejner. V kontextu Fedory jsou flatpaky jen jinou formou kontejnerů a zachází se s nimi podobně jako s kontejnery pro serverové použití.
+Obecný postup je nejdříve vytvořit modul a z něj následně kontejner. V kontextu Fedory jsou Flatpaky jen jinou formou kontejnerů a zachází se s nimi podobně jako s kontejnery pro serverové použití.
 Teď, když už víme všechno potřebné, se můžeme pustit do praktické ukázky. Pokud používáme Silverblue, vytvořme si nový toolbox kontejner a vstupme do něj pomocí příkazů dále. PPru, rovnou pokračujme dál.
 ~~~
 $ toolbox create -c jmeno-kontejneru
@@ -38,7 +38,7 @@ $ flatpak remote-add fedora-testing oci+https://registry.fedoraproject.org#testi
 $ flatpak install fedora-testing org.fedoraproject.Platform/x86_64/f30
 ~~~
 
-Pokud se vše podařilo, můžeme přistoupit k samotnému převodu aplikace. Pro ukázku nám bude sloužit hra Supertux - ta už v repozitáři Fedory jako flatpak je[0], ale je jednoduchá a proto vhodná na ukázku. Přejděme tedy do složky, kde plánujeme kovertovat své aplikace - doporučuji si udělat například složku "flatpaks" a v ní potom podsložky pro každou aplikaci - vytvořme složku pro Supertuxe a přesuňme se do ní - název musí být stejný jako název budoucího flatpaku a ten by měl být stejný jako název RPM balíčku.
+Pokud se vše podařilo, můžeme přistoupit k samotnému převodu aplikace. Pro ukázku nám bude sloužit hra Supertux - ta už v repozitáři Fedory jako Flatpak je[0], ale je jednoduchá a proto vhodná na ukázku. Přejděme tedy do složky, kde plánujeme kovertovat své aplikace - doporučuji si udělat například složku "flatpaks" a v ní potom podsložky pro každou aplikaci - vytvořme složku pro Supertuxe a přesuňme se do ní - název musí být stejný jako název budoucího Flatpaku a ten by měl být stejný jako název RPM balíčku.
 ~~~
 $ mkdir supertux && cd supertux
 ~~~
@@ -139,7 +139,7 @@ $ flatpak run org.supertuxproject.SuperTux
 
 ## Flatpak a infrastruktura Fedora
 
-Nyní máme lokálně sestavený funkční flatpak. My ho ovšem chceme dát k dispozici i ostatním, takže ho musíme nahrát do infrastruktury Fedora. Jelikož už Supertux jako flatpak existuje, prakticky si další kroky můžete vyzkoušet, až budete převádět vlastní aplikaci. Předtím ale potřebujeme několik věcí. Tou první je Fedora account, který si můžeme vytvořit zde:  https://admin.fedoraproject.org/accounts/. Až ho budeme mít, potřebujeme vyplnit vše potřebné, naimportovat svůj veřejný ssh klíč a hlavně, být přidání do skupiny packager. Schválně píšu "být přidáni", protože vás musí pozvat někdo, kdo už v této skupině je a kdo má požadovaná práva. Pokud takového člověka neznáte, zeptejte se na https://ask.fedoraproject.org/, určitě vám někdo pomůže. 
+Nyní máme lokálně sestavený funkční Flatpak. My ho ovšem chceme dát k dispozici i ostatním, takže ho musíme nahrát do infrastruktury Fedora. Jelikož už Supertux jako Flatpak existuje, prakticky si další kroky můžete vyzkoušet, až budete převádět vlastní aplikaci. Předtím ale potřebujeme několik věcí. Tou první je Fedora account, který si můžeme vytvořit zde:  https://admin.fedoraproject.org/accounts/. Až ho budeme mít, potřebujeme vyplnit vše potřebné, naimportovat svůj veřejný ssh klíč a hlavně, být přidání do skupiny packager. Schválně píšu "být přidáni", protože vás musí pozvat někdo, kdo už v této skupině je a kdo má požadovaná práva. Pokud takového člověka neznáte, zeptejte se na https://ask.fedoraproject.org/, určitě vám někdo pomůže. 
 
 Kromě FAS (Fedora Account System) účtu budete potřebovat ještě účet na https://pagure.io/. Ten bude propojený s vaším FAS účtem a je nutné mít na obou účtech stejné jméno. Nyní potřebujeme provést i nějaká lokální nastavení. Na Pagure si vygenerujeme API klíč a vložíme ho do .config/rpkg/fedpkg.conf v tomto formátu - <APIkey> nahradíme za náš API klíč:
 ~~~
@@ -150,7 +150,7 @@ Nyní už stačí jen do souboru ***** napsat své FAS jméno (pouze to, nic jin
 
 Během vytváření účtů a nastavování občas vzniknou problémy, proto se nebojte ozvat na https://ask.fedoraproject.org/, kde vám někdo pomůže.
 
-Zpět k převodu RPM do flatpaku. Skončili jsme ve stavu dvou připravených .yaml souborů a chystali jsme se je uploadovat do infrastruktury Fedora. 
+Zpět k převodu RPM do Flatpaku. Skončili jsme ve stavu dvou připravených .yaml souborů a chystali jsme se je uploadovat do infrastruktury Fedora. 
 Prvním krokem je požadavek na vytvoření repozitáře - to může trvat i několik desítek hodin, jelikož se o to starají živí lidé, kteří kontrolují validitu požadavku a podobně.
 ~~~
 $ fedpkg request-repo --namespace=flatpaks <jmeno_aplikace>
@@ -180,13 +180,13 @@ Teď bychom měli otestovat flatpak vytvořený na Koji, abychom ověřili, že 
 $ flatpak-module install --koji <jmeno_aplikace>:master
 ~~~
 
-A poslední krok je na Bodhi[3] založit nový update. Do políčka Candidate Builds vložíme NVR	našeho flatpaku - pokud ho nenajdeme v terminálu v logu předchozích kroků, můžeme ho najít i v koji. Stačí na [2] vyhledat název aplikace. Hledané NVR bude jedno z vrchních a bude vypadat nějak takto: mojeaplikace-20b180601144429.2. Do políčka "Update notes" stačí napsat něco jako "Initial flatpak of <jmeno_aplikace>", Type vyberme "newpackage" a zmáčkněme "Submit". Nyní stačí počkat, až flatpak projde testováním. A to je vše! 
+A poslední krok je na Bodhi[3] založit nový update. Do políčka Candidate Builds vložíme NVR	našeho Flatpaku - pokud ho nenajdeme v terminálu v logu předchozích kroků, můžeme ho najít i v koji. Stačí na [2] vyhledat název aplikace. Hledané NVR bude jedno z vrchních a bude vypadat nějak takto: mojeaplikace-20b180601144429.2. Do políčka "Update notes" stačí napsat něco jako "Initial Flatpak of <jmeno_aplikace>", Type vyberme "newpackage" a zmáčkněme "Submit". Nyní stačí počkat, až Flatpak projde testováním. A to je vše! 
 
 ## Troubleshooting aneb co se může rozbít
 
-Během samotné konverze nebo i během testování flatpaku můžeme narazit na různé problémy. Níže zkusím sepsat ty, do kterých jsem nejčastěji padal - a stále padám :) - a přidám k nim i svá řešení:
+Během samotné konverze nebo i během testování Flatpaku můžeme narazit na různé problémy. Níže zkusím sepsat ty, do kterých jsem nejčastěji padal - a stále padám :) - a přidám k nim i svá řešení:
 
-1) Jak sestavit flatpak s využitím lokální verze RPM?
+1) Jak sestavit Flatpak s využitím lokální verze RPM?
 
 Občas se může stát, že si stáhnete RPM balíček a provedete změnu v jeho spec souboru, kterou byste rádi otestovali před jejím zvěřejněním. V souboru  /etc/module-build-service/config.py změňte RPMS_ALLOW_REPOSITORY = False na RPMS_ALLOW_REPOSITORY = True a dále na jeho konec přidejte, kde <path to checkouts> je cesta, kde máte stažené git repozitáře RPM balíčků.
 ~~~
@@ -210,9 +210,9 @@ rpms:
 
 Relativně častá chyba v RPM balíčcích je uvádění manuálových souborů s příponou .gz. Ve spec souboru stačí nahradit problematickou příponu .gz za hvězdičku, jak je popsané třeba tu: [4]. 
 
-3) Jak debugovat vytvořený flatpak?
+3) Jak debugovat vytvořený Flatpak?
 
-Existuje několik způsobů, jak vytvořený flatpak debugovat, pokud nám stačí se podívat "dovnitř" flatpaku - třeba když zjišťujeme, co všechno aplikace ve flatpaku vidí a kam má přístup - stačí spustit flatpak s flagy jako ve vzoru níže. -d je zkratka pro --develm --command=bash způsobí, že se flatpak automaticky nespustí, ale dostaneme se "dovnitř".
+Existuje několik způsobů, jak vytvořený Flatpak debugovat, pokud nám stačí se podívat "dovnitř" Flatpaku - třeba když zjišťujeme, co všechno aplikace ve Flatpaku vidí a kam má přístup - stačí spustit Flatpak s flagy jako ve vzoru níže. -d je zkratka pro --develm --command=bash způsobí, že se Flatpak automaticky nespustí, ale dostaneme se "dovnitř".
 ~~~
 flatpak run -d --command=bash org.nazev.aplikace
 ~~~ 
