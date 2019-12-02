@@ -166,7 +166,7 @@ $ git commit -m "Initial import"
 $ git push origin master
 ~~~
 
-Nyní musíme nechat Fedoru, aby náš flatpak ověřila sestavením v Koji[2](https://koji.fedoraproject.org/koji/) - opět nejdříve modul...
+Nyní musíme nechat Fedoru, aby náš Flatpak ověřila sestavením v Koji[2](https://koji.fedoraproject.org/koji/) - opět nejdříve modul...
 ~~~
 $ fedpkg module-build
 ~~~
@@ -179,7 +179,7 @@ Teď bychom měli otestovat Flatpak vytvořený na Koji, abychom ověřili, že 
 $ flatpak-module install --koji <jmeno_aplikace>:master
 ~~~
 
-Posledním krokem je v Bodhi[3](https://bodhi.fedoraproject.org/updates/new) vytvořit nový update. Do pole *Candidate Builds* vložíme NVR (popsáno níže) našeho Flatpaku - pokud ho nenajdeme v terminálu v logu předchozích kroků, můžeme ho najít i v koji. Stačí na [2](https://koji.fedoraproject.org/koji/) vyhledat název aplikace. Hledané NVR bude jedno z vrchních a bude vypadat nějak takto: mojeaplikace-20b180601144429.2. Do políčka "Update notes" stačí napsat něco jako "Initial Flatpak of <jmeno_aplikace>", *Type* zvolíme "newpackage" a stiskneme "Submit". Nyní stačí počkat, až Flatpak projde testováním. A to je vše! 
+Posledním krokem je v Bodhi[3](https://bodhi.fedoraproject.org/updates/new) vytvořit nový update. Do pole *Candidate Builds* vložíme NVR (popsáno níže) našeho Flatpaku - pokud ho nenajdeme v terminálu v logu předchozích kroků, můžeme ho najít i v Koji. Stačí na [2](https://koji.fedoraproject.org/koji/) vyhledat název aplikace. Hledané NVR bude jedno z vrchních a bude vypadat nějak takto: mojeaplikace-20b180601144429.2. Do políčka "Update notes" stačí napsat něco jako "Initial Flatpak of <jmeno_aplikace>", *Type* zvolíme "newpackage" a stiskneme "Submit". Nyní stačí počkat, až Flatpak projde testováním. A to je vše! 
 
 ## Troubleshooting aneb co se může rozbít
 
@@ -196,7 +196,7 @@ LocalBuildConfiguration.DISTGITS = {
                                      'fedpkg --release module sources'),
 }
 ~~~
-V yaml souboru aplikace poté přidejte k dané závislosti řádek `repository: file:///<path to checkouts>/libpeas`. Pokud bych chtěl vyzkoušet například změny v balíčku libpeas, jeho záznam v yaml souboru by vypadal takto - upozorňuji, že je nutné změnit hodnotu `ref:` na "master":  
+V yaml souboru aplikace poté přidejte k dané závislosti řádek `repository: file:///<path to checkouts>/<jmeno_zavislosti>`. Pokud bych chtěl vyzkoušet například změny v balíčku libpeas, jeho záznam v yaml souboru by vypadal takto - upozorňuji, že je nutné změnit hodnotu `ref:` na "master":  
 ~~~
 rpms:
       libpeas:
