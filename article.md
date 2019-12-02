@@ -13,7 +13,7 @@ Bohužel, jelikož je Flatpak relativně nová technologie (prvotní myšlenka v
 ## Jak se liší "normální" Flatpaky od těch pro Fedoru?
 
 Hlavním rozdílem je zdroj dat. "Normální" Flatpaky jsou sestavovány přímo ze zdrojových kódů, kdežto Flatpaky od Fedory využívají jako zdroj dat RPM balíčky, což má za následek několik výhod. RPM balíčky jsou vytvářeny transparentním způsobem pod dohledem distribuce a jsou tedy důvěryhodné, což u Flathubu, kde jsou Flatpaky vytvářeny dobrovolníky nemusí být vždy pravdou. Dále je předem známý strom závislostí a aplikaci stačí "jen" zabalit. Díky RPM je také jasné, co a kam se instaluje - ve Flatpaku se sice data aplikace nacházejí ve složce /app, ale stejně je dobré mít možnost dohledat, ke které části aplikace ten či onen soubor patří.
-Jako vše, i toto řešení má svoje nevýhody. Jelikož se k sestavování Flatpaků používají normální balíčky bez možnosti patche, v jejich spec souborech se občas nachází speciální úpravy kvůli Flatpakům, které do nich přidají několik dalších řádků.
+Jako vše, i toto řešení má svoje nevýhody. Jelikož se k sestavování Flatpaků používají normální balíčky bez možnosti dodatečného patche, v jejich spec souborech se občas nachází speciální úpravy kvůli Flatpakům, které do nich přidají několik dalších řádků.
 
 
 ## Jak samotné převádění funguje? 
@@ -139,14 +139,13 @@ $ flatpak run org.supertuxproject.SuperTux
 
 ## Flatpak a infrastruktura distribuce Fedora
 
-Nyní máme lokálně sestavený funkční Flatpak. My ho ovšem chceme dát k dispozici i ostatním, takže jej musíme nahrát do infrastruktury Fedora. Jelikož už Supertux jako Flatpak existuje, prakticky si další kroky můžete vyzkoušet, až budete převádět vlastní aplikaci. Předtím ale potřebujeme několik věcí. Tou první je Fedora account, který si můžeme vytvořit zde: https://admin.fedoraproject.org/accounts/. Až bude účet vytvořen, vyplníme potřebné informace a naimportovat svůj veřejný ssh klíč. Dále musíte být přidání do skupiny packager, kam vás musí pozvat někdo, kdo už v této skupině je a kdo má požadovaná práva. Pokud takového člověka neznáte, zeptejte se na https://ask.fedoraproject.org/, určitě vám někdo pomůže. 
+Nyní máme lokálně sestavený funkční Flatpak. My ho ovšem chceme dát k dispozici i ostatním, takže jej musíme nahrát do infrastruktury Fedora. Jelikož už Supertux jako Flatpak existuje, prakticky si další kroky můžete vyzkoušet, až budete převádět vlastní aplikaci. Předtím ale potřebujeme několik věcí. Tou první je Fedora account, který si můžeme vytvořit zde: https://admin.fedoraproject.org/accounts/. Až bude účet vytvořen, vyplníme potřebné informace a naimportujeme svůj veřejný ssh klíč. Dále musíte být přidání do skupiny packager, kam vás musí pozvat někdo, kdo už v této skupině je a kdo má požadovaná práva. Pokud takového člověka neznáte, zeptejte se na https://ask.fedoraproject.org/, určitě vám někdo pomůže. 
 
 Kromě FAS (Fedora Account System) účtu budete potřebovat ještě účet na https://pagure.io/. Ten bude propojený s vaším FAS účtem a je nutné mít na obou účtech stejné jméno. Nyní potřebujeme provést i nějaká lokální nastavení. Na Pagure si vygenerujeme API klíč a vložíme ho do `.config/rpkg/fedpkg.conf` v níže popsaném formátu, kde `<APIkey>` nahradíme za náš API klíč:
 ~~~
 [fedpkg.pagure]
 token = <APIkey>
 ~~~
-Nyní už stačí jen do souboru *XXX - do jakého?* napsat své FAS jméno (pouze to, nic jiného).
 
 Během vytváření účtů a nastavování občas vzniknou problémy, proto se nebojte poprosit o radu na https://ask.fedoraproject.org/, kde vám někdo pomůže.
 
@@ -180,7 +179,7 @@ Teď bychom měli otestovat Flatpak vytvořený na Koji, abychom ověřili, že 
 $ flatpak-module install --koji <jmeno_aplikace>:master
 ~~~
 
-Posledním krokem je v Bodhi[3](https://bodhi.fedoraproject.org/updates/new) vytvořit nový update. Do pole *Candidate Builds* vložíme NVR (popsáno níže) našeho Flatpaku - pokud ho nenajdeme v terminálu v logu předchozích kroků, můžeme ho najít i v koji. Stačí na [2](https://koji.fedoraproject.org/koji/) vyhledat název aplikace. Hledané NVR bude jedno z vrchních a bude vypadat nějak takto: mojeaplikace-20b180601144429.2. Do políčka "Update notes" stačí napsat něco jako "Initial Flatpak of <jmeno_aplikace>", *Type** zvolíme "newpackage" a stiskneme "Submit". Nyní stačí počkat, až Flatpak projde testováním. A to je vše! 
+Posledním krokem je v Bodhi[3](https://bodhi.fedoraproject.org/updates/new) vytvořit nový update. Do pole *Candidate Builds* vložíme NVR (popsáno níže) našeho Flatpaku - pokud ho nenajdeme v terminálu v logu předchozích kroků, můžeme ho najít i v koji. Stačí na [2](https://koji.fedoraproject.org/koji/) vyhledat název aplikace. Hledané NVR bude jedno z vrchních a bude vypadat nějak takto: mojeaplikace-20b180601144429.2. Do políčka "Update notes" stačí napsat něco jako "Initial Flatpak of <jmeno_aplikace>", *Type* zvolíme "newpackage" a stiskneme "Submit". Nyní stačí počkat, až Flatpak projde testováním. A to je vše! 
 
 ## Troubleshooting aneb co se může rozbít
 
@@ -216,6 +215,7 @@ Existuje několik způsobů, jak vytvořený Flatpak debugovat, pokud nám stač
 ~~~
 flatpak run -d --command=bash org.nazev.aplikace
 ~~~ 
+
 
 [0]: https://src.fedoraproject.org/flatpaks/supertux
 [1]: https://src.fedoraproject.org/
