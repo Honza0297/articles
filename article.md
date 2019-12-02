@@ -211,7 +211,7 @@ Relativně častá chyba v RPM balíčcích je uvádění manuálových souborů
 
 3) Jak debugovat vytvořený Flatpak?
 
-Existuje několik způsobů, jak vytvořený Flatpak debugovat, pokud nám stačí se podívat "dovnitř" Flatpaku - třeba když zjišťujeme, co všechno aplikace ve Flatpaku vidí a kam má přístup - stačí spustit Flatpak s flagy jako ve vzoru níže. `-d` je zkratka pro `--devel` a `--command=bash` způsobí, že se Flatpak automaticky nespustí, ale dostaneme se "dovnitř".
+Existuje několik způsobů, jak vytvořený Flatpak debugovat, pokud nám stačí se podívat "dovnitř" Flatpaku - třeba když zjišťujeme, co všechno aplikace ve Flatpaku vidí a kam má přístup - stačí spustit Flatpak s flagy jako ve vzoru níže. `-d` je zkratka pro `--devel` a `--command=bash` způsobí, že se Flatpak automaticky nespustí, ale dostaneme se "dovnitř" - spustí se bash.
 ~~~
 flatpak run -d --command=bash org.nazev.aplikace
 ~~~ 
