@@ -1,4 +1,4 @@
-# Jak zálohovat a obnovovat Toolboxy
+# Jak zálohovat a obnovovat toolbox kontejnery
 
 Článek je přeložený a lehce upravený z [originálu](https://fedoramagazine.org/backup-and-restore-toolboxes-with-podman/) na [fedoramagazine.org](https://fedoramagazine.org). 
 
