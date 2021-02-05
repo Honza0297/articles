@@ -1,4 +1,4 @@
-# How to make Flatpak from RPM
+# How to make a flatpak from RPM
 
 
 ## Flatpak in general
