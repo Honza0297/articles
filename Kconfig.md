@@ -9,7 +9,7 @@ Here is a quick guide how to try it:
 
 Now, ESP-IDF build system will use the new Kconfig parser. In case you run into any issues, you can always safely return to the previous parser, either by unsetting the `KCONFIG_PARSER_VERSION` environment variable or by setting it to `1`. 
 
-If you find any bugs or cumbersome situations, please report them to <jan.beran@espressif.com>.
+If you find any bugs or cumbersome situations, please report them to [jan.beran@espressif.com](mailto:jan.beran@espressif.com).
 
 Thank you very much!
  
